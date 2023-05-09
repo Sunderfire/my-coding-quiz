@@ -15,12 +15,8 @@ var isWin = false
 var timer;
 var timerCount;
 var chosenQuestion;
-
 var initialsField = document.createElement("input");
-
 var submitScore = document.createElement("button");
-submitScore.type = "submit";
-submitScore.textContent = "Submit"
 
 var questions = [
     {
@@ -55,8 +51,8 @@ function startGame() {
     startButton.disabled = true;
     startButton.style.display = "none";
     scoreElement.innerHTML = "",
-    scoreElement.innerHTML = "",
-    renderQuestion();
+        scoreElement.innerHTML = "",
+        renderQuestion();
     startTimer();
 }
 
@@ -67,8 +63,6 @@ function endGame() {
     startButton.style.display = "initial";
     startButton.textContent = "Play Again";
     answerButtons.innerHTML = "";
-    var initialsField = document.createElement("input");
-    var submitScore = document.createElement("button");
     initialsField.type = "text";
     initialsField.placeholder = "Enter your initials";
     submitScore.type = "submit";
@@ -107,7 +101,6 @@ function renderQuestion() {
 
 function correctAnswer() {
     scoreCount++
-    localStorage.setItem("score", scoreCount);
     console.log(scoreCount)
 }
 
@@ -127,14 +120,30 @@ function checkAnswer(event) {
     }
 }
 
+function saveScore() {
+    if (initialsField !== null) {
+        var inputValue = initialsField.value.toUpperCase();
+        var scores = JSON.parse(localStorage.getItem("scores")) || [];
+        scores.push({initial: inputValue, score: scoreCount});
+        localStorage.setItem("scores", JSON.stringify(scores));
+        initialsField.value = "";
+    }
+}
+
 startButton.addEventListener("click", startGame);
 answerButtons.addEventListener("click", checkAnswer);
+submitScore.addEventListener("click", saveScore);
+
 
 //When I click the start button the the user is presented a random coding question
-    //I am also presented with a series of random answers for that question, one of which is correct.
+//I am also presented with a series of random answers for that question, one of which is correct.
 //When I answer the question, I am presented with another question, five times
 //When I answer a question incorrectly, time is subtracted from the clock
 //Then when all questions have been answered or the timer reached zero
-    //The game ends
+//The game ends
 //When the game ends, I can save my initials and my score
 
+function checkScores() {
+    var storedScore = localStorage.getItem("scores");
+    console.log(storedScore);
+}
