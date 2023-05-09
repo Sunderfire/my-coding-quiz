@@ -1,4 +1,4 @@
-
+//Class Variables
 var highscoreButton = document.querySelector(".highscore-button");
 var timerElement = document.querySelector(".timer");
 var questionText = document.querySelector(".question");
@@ -9,15 +9,17 @@ var startButton = document.querySelector(".start-button");
 var resultSpan = document.querySelector(".result-declaration");
 var scoreElement = document.querySelector(".submit-score");
 
-
+//Variables
 var scoreCount = 0;
 var isWin = false
 var timer;
 var timerCount;
 var chosenQuestion;
+var questionsAsked = 0;
 var initialsField = document.createElement("input");
 var submitScore = document.createElement("button");
 
+//Questions Array
 var questions = [
     {
         question: "1",
@@ -44,17 +46,19 @@ var questions = [
         answers: ["q", "r", "s", "t",],
         rightAnswer: "q",
     }
-]
+];
+var selectedQuestion;
 
+//Game Functions
 function startGame() {
     timerCount = 75;
     startButton.disabled = true;
     startButton.style.display = "none";
     scoreElement.innerHTML = "",
-        scoreElement.innerHTML = "",
-        renderQuestion();
+    selectedQuestion = [];
+    renderQuestion();
     startTimer();
-}
+};
 
 function endGame() {
     questionText.textContent = "All done!";
@@ -63,6 +67,7 @@ function endGame() {
     startButton.style.display = "initial";
     startButton.textContent = "Play Again";
     answerButtons.innerHTML = "";
+    resultSpan.innerHTML = "";
     initialsField.type = "text";
     initialsField.placeholder = "Enter your initials";
     submitScore.type = "submit";
@@ -70,7 +75,7 @@ function endGame() {
     scoreElement.appendChild(initialsField);
     scoreElement.appendChild(submitScore);
     stopTimer();
-}
+};
 
 function startTimer() {
     timer = setInterval(function () {
@@ -81,33 +86,53 @@ function startTimer() {
             timerElement.textContent = "time left = " + timerCount;
         }
     }, 1000)
-}
+};
 
 function stopTimer() {
     clearInterval(timer);
     timerElement.textContent = "time left = ";
-}
+};
 
+//Question/Answers Functions
 function renderQuestion() {
-    chosenQuestion = questions[Math.floor(Math.random() * questions.length)];
+    var availableQuestions = questions.filter(function(question) {
+        return !selectedQuestion.includes(question);
+    })
+    chosenQuestion = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
     questionText.textContent = chosenQuestion.question;
+    answerButtons.innerHTML = "";
     instructionText.innerHTML = "";
+    questionsAsked++;
     chosenQuestion.answers.forEach(function (answer) {
         var answerButton = document.createElement("button");
         answerButton.textContent = answer;
         answerButtons.appendChild(answerButton);
     });
-}
+};
 
 function correctAnswer() {
-    scoreCount++
-    console.log(scoreCount)
-}
+    scoreCount++;
+    declareCorrect();
+    console.log(scoreCount);
+    if (questionsAsked === 5) {
+        endGame();
+    } 
+    else {
+        renderQuestion();
+    };
+};
 
 function incorrectAnswer() {
     timerCount -= 15;
     timerElement.textContent = "time left = " + timerCount;
-}
+    declareWrong();
+    if (questionsAsked === 5) {
+        endGame();
+    }
+    else {
+        renderQuestion();
+    };
+};
 
 function checkAnswer(event) {
     console.log(event.target);
@@ -116,10 +141,19 @@ function checkAnswer(event) {
         correctAnswer();
     }
     else {
-        incorrectAnswer()
-    }
-}
+        incorrectAnswer();
+    };
+};
 
+function declareCorrect() {
+    resultSpan.innerHTML = "Correct!";
+};
+
+function declareWrong() {
+    resultSpan.innerHTML = "Wrong!";
+};
+
+//Score Functions
 function saveScore() {
     if (initialsField !== null) {
         var inputValue = initialsField.value.toUpperCase();
@@ -127,12 +161,18 @@ function saveScore() {
         scores.push({initial: inputValue, score: scoreCount});
         localStorage.setItem("scores", JSON.stringify(scores));
         initialsField.value = "";
-    }
-}
+    };
+};
 
+function checkScores() {
+    var storedScore = alert("Highscores:" + localStorage.getItem("scores"));
+};
+
+//Event Listeners
 startButton.addEventListener("click", startGame);
 answerButtons.addEventListener("click", checkAnswer);
 submitScore.addEventListener("click", saveScore);
+highscoreButton.addEventListener("click", checkScores);
 
 
 //When I click the start button the the user is presented a random coding question
@@ -143,7 +183,3 @@ submitScore.addEventListener("click", saveScore);
 //The game ends
 //When the game ends, I can save my initials and my score
 
-function checkScores() {
-    var storedScore = localStorage.getItem("scores");
-    console.log(storedScore);
-}
