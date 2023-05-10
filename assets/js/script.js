@@ -102,7 +102,7 @@ function startTimer() {
             endGame();
         } else {
             timerCount--;
-            timerElement.textContent = "time left = " + timerCount;
+            timerElement.textContent = "Time left = " + timerCount;
         }
         if (timerCount <= 5) {
             timerElement.style.color = "red";
@@ -112,7 +112,7 @@ function startTimer() {
 
 function stopTimer() {
     clearInterval(timer);
-    timerElement.textContent = "time left = ";
+    timerElement.textContent = "Time left = ";
     timerElement.style.color = "black";
 };
 
@@ -148,7 +148,7 @@ function correctAnswer() {
 
 function incorrectAnswer() {
     timerCount -= 15;
-    timerElement.textContent = "time left = " + timerCount;
+    timerElement.textContent = "Time left = " + timerCount;
     declareWrong();
     if (questionsAsked === 5) {
         endGame();
