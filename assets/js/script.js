@@ -50,8 +50,19 @@ var questions = [
         question: "Which HTML element is used to define a header?",
         answers: ["<span>", "<h1>", "<section>", "<a>",],
         rightAnswer: "<h1>",
+    },
+    {
+        question: "Which HTML element is used to create a list item?",
+        answers: ["<ul>", "<span>", "<li>", "<ol>",],
+        rightAnswer: "<li>",
+    },
+    {
+        question: "Which of the following is NOT a valid JavaScript data type?",
+        answers: ["String", "Number", "Boolean", "Character",],
+        rightAnswer: "Character",
     }
 ];
+
 var selectedQuestion;
 
 //Game Functions

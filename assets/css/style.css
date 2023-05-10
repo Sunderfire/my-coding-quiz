@@ -3,8 +3,10 @@
     --green: #1CE224;
     --lightgreen: #71ED76;
     --magenta: #E21CDA;
+    --black: black;
 }
 
+/*Header Styles*/
 header {
     display: flex;
     justify-content: space-between;
@@ -18,7 +20,7 @@ header {
     font-size: 20px;
 }
 
-
+/*Game Styles*/
 .question {
     display: flex;
     justify-content: center;
@@ -31,6 +33,7 @@ header {
     justify-content: center;
 }
 
+/*Game Button Styles*/
 .start-button {
     display: flex;
     justify-content: center;
@@ -39,10 +42,10 @@ header {
     width: 20%;
     margin: 50px 10px 50px 10px;
     padding: 10px;
-    border: 3px solid black;
+    border: 3px solid var(--black);
     border-radius: 8px;
     background-color: var(--green);
-    color: black;
+    color: var(--black);
     font-size: 20pt;
 }
 
@@ -67,7 +70,7 @@ header {
 .answer-buttons button {
     margin: 50px 10px 50px 10px;
     padding: 10px;
-    border: 3px solid black;
+    border: 3px solid var(--black);
     border-radius: 8px;
     font-size: 20pt;
     background-color: var(--green);
@@ -86,11 +89,13 @@ header {
     border-color: var(--magenta); 
 }
 
+/*Score Styles*/
 .submit-score {
     display: flex;
     justify-content: center;
 }
 
+/*Results Styles*/
 .result-declaration {
     display: flex;
     justify-content: center;
