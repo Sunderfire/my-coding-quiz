@@ -22,29 +22,34 @@ var submitScore = document.createElement("button");
 //Questions Array
 var questions = [
     {
-        question: "1",
-        answers: ["a", "b", "c", "d",],
-        rightAnswer: "a",
+        question: "What does CSS stand for?",
+        answers: ["Creative Style Sheets", "Computer Styling Structure", "Cascading Style Sheets", "Colorful Slick Styles",],
+        rightAnswer: "Cascading Style Sheets",
     },
     {
-        question: "2",
-        answers: ["e", "f", "g", "h",],
-        rightAnswer: "e",
+        question: "Which of the following is NOT a valid CSS length unit?",
+        answers: ["em", "px", "pt", "cm",],
+        rightAnswer: "cm",
     },
     {
-        question: "3",
-        answers: ["i", "j", "k", "l",],
-        rightAnswer: "i",
+        question: "What does HTML stand for?",
+        answers: ["High Traffic Multimedia Layout", "HyperText Markup Language", "Heavy Text Master Language", "HyperText Makeup Layout",],
+        rightAnswer: "HyperText Markup Language",
     },
     {
-        question: "4",
-        answers: ["m", "n", "o", "p",],
-        rightAnswer: "m",
+        question: "In JavaScript, which keyword is used to declare a variable?",
+        answers: ["const", "var", "let", "all of the above",],
+        rightAnswer: "all of the above",
     },
     {
-        question: "5",
-        answers: ["q", "r", "s", "t",],
-        rightAnswer: "q",
+        question: "In JavaScript, what does DOM stand for?",
+        answers: ["Document Object Model", "Dynamic Object Mode", "Data Objective Manuscript", "Data Object Manipulator",],
+        rightAnswer: "Document Object Model",
+    },
+    {
+        question: "Which HTML element is used to define a header?",
+        answers: ["<span>", "<h1>", "<section>", "<a>",],
+        rightAnswer: "<h1>",
     }
 ];
 var selectedQuestion;
@@ -54,13 +59,16 @@ function startGame() {
     timerCount = 75;
     startButton.disabled = true;
     startButton.style.display = "none";
-    scoreElement.innerHTML = "",
+    scoreCount = 0;
+    scoreElement.innerHTML = "";
     selectedQuestion = [];
+    questionsAsked = "";
     renderQuestion();
     startTimer();
 };
 
 function endGame() {
+    timerCount = 75;
     questionText.textContent = "All done!";
     instructionText.innerHTML = "Your final score is " + scoreCount;
     startButton.disabled = false;
@@ -85,20 +93,25 @@ function startTimer() {
             timerCount--;
             timerElement.textContent = "time left = " + timerCount;
         }
+        if (timerCount <= 5) {
+            timerElement.style.color = "red";
+        }
     }, 1000)
 };
 
 function stopTimer() {
     clearInterval(timer);
     timerElement.textContent = "time left = ";
+    timerElement.style.color = "black";
 };
 
 //Question/Answers Functions
 function renderQuestion() {
-    var availableQuestions = questions.filter(function(question) {
+    var availableQuestions = questions.filter(function (question) {
         return !selectedQuestion.includes(question);
     })
     chosenQuestion = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
+    selectedQuestion.push(chosenQuestion);
     questionText.textContent = chosenQuestion.question;
     answerButtons.innerHTML = "";
     instructionText.innerHTML = "";
@@ -116,7 +129,7 @@ function correctAnswer() {
     console.log(scoreCount);
     if (questionsAsked === 5) {
         endGame();
-    } 
+    }
     else {
         renderQuestion();
     };
@@ -155,10 +168,10 @@ function declareWrong() {
 
 //Score Functions
 function saveScore() {
-    if (initialsField !== null) {
+    if (initialsField.value) {
         var inputValue = initialsField.value.toUpperCase();
         var scores = JSON.parse(localStorage.getItem("scores")) || [];
-        scores.push({initial: inputValue, score: scoreCount});
+        scores.push({ initials: inputValue, score: scoreCount });
         localStorage.setItem("scores", JSON.stringify(scores));
         initialsField.value = "";
     };
@@ -173,13 +186,3 @@ startButton.addEventListener("click", startGame);
 answerButtons.addEventListener("click", checkAnswer);
 submitScore.addEventListener("click", saveScore);
 highscoreButton.addEventListener("click", checkScores);
-
-
-//When I click the start button the the user is presented a random coding question
-//I am also presented with a series of random answers for that question, one of which is correct.
-//When I answer the question, I am presented with another question, five times
-//When I answer a question incorrectly, time is subtracted from the clock
-//Then when all questions have been answered or the timer reached zero
-//The game ends
-//When the game ends, I can save my initials and my score
-
